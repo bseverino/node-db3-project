@@ -114,4 +114,26 @@ router.delete('/:id', (req, res) => {
   });
 });
 
+router.post('/:id/addStep', (req, res) => {  
+  const { id } = req.params
+  const step = {
+    ...req.body,
+    scheme_id: id
+  }
+
+  Schemes.addStep(step, id)
+    .then(steps => {
+      if (steps.length) {
+        res.json(steps)
+      }
+      else {
+        res.status(404).json({ message: 'Could not find scheme with given id' })
+      }
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({ message: 'Failed to add step' })
+    })
+})
+
 module.exports = router;
